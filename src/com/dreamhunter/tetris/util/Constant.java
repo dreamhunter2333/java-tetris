@@ -192,4 +192,6 @@ public class Constant {
     // 字体
     public static final Font APP_FONT = new Font("华文琥珀", Font.ITALIC, 24);// 字体
 
+    public static final String SCORE_FILE_PATH = "resources/score"; // 分数文件路径
+
 }

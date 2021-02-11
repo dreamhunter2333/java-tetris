@@ -2,6 +2,7 @@ package com.dreamhunter.tetris.app;
 
 import com.dreamhunter.tetris.component.Background;
 import com.dreamhunter.tetris.component.Block;
+import com.dreamhunter.tetris.component.ScoreCounter;
 import com.dreamhunter.tetris.listener.BlockKeyListener;
 import com.dreamhunter.tetris.util.Constant;
 
@@ -21,7 +22,7 @@ public class Tetris extends Frame {
     // 方块数组
     private List<Integer> blockList = new ArrayList<>(Constant.INIT_BLOCK_LIST);
     // 分数
-    private int score = 0;
+    private ScoreCounter counter; // 计分器
 
     // 游戏状态
     public int gameState;
@@ -62,6 +63,7 @@ public class Tetris extends Frame {
 
     // 初始化游戏中的各个对象
     private void initGame() {
+        counter = ScoreCounter.getInstance(); // 计分器
         background = new Background();
         block = new Block();
         setGameState(GAME_READY);
@@ -108,17 +110,17 @@ public class Tetris extends Frame {
             // 绘制所有方块
             background.drawBlockList(bufG, blockList, block.blockList);
             // 绘制分数
-            background.drawScore(bufG, score);
+            background.drawScore(bufG, counter.getCurrentScore());
         } else if (gameState == GAME_PAUSE) {
             // 绘制所有方块
             background.drawBlockList(bufG, blockList, block.blockList);
             // 绘制分数
-            background.drawScore(bufG, score);
+            background.drawScore(bufG, counter.getCurrentScore());
             // 绘制暂停页面
             background.drawPause(bufG);
         } else {
             // 游戏结束
-            background.drawOver(bufG, score);
+            background.drawOver(bufG, counter.getCurrentScore(), counter.getBestScore());
         }
         // 一次性将图片绘制到屏幕上
         g.drawImage(bufImg, 0, 0, null);
@@ -140,7 +142,7 @@ public class Tetris extends Frame {
             newBlockList.add(Constant.BLANK_BLOCK_ROW);
         }
         // 更新分数和方块数组
-        score += scoreRow;
+        counter.score(scoreRow);
         blockList = newBlockList;
     }
 
@@ -150,6 +152,7 @@ public class Tetris extends Frame {
         if (!res) {
             // 新建方块失败，游戏结束
             setGameState(GAME_OVER);
+            counter.saveScore();
         }
     }
 
@@ -159,7 +162,7 @@ public class Tetris extends Frame {
         // 清空方块数组
         blockList = new ArrayList<>(Constant.INIT_BLOCK_LIST);
         // 清空计分
-        score = 0;
+        counter.reset();
     }
 
     // 方块快速下落

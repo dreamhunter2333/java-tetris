@@ -55,16 +55,20 @@ public class Background {
     }
 
     // 绘制结束页面
-    public void drawOver(Graphics g, int score) {
+    public void drawOver(Graphics g, int score, int bestScore) {
         g.setColor(Color.BLACK);
         int x = (Constant.FRAME_WIDTH - TetrisUtil.getStringWidth(Constant.APP_FONT, "游戏结束，空格键以继续")) >> 1;
         int y = Constant.FRAME_HEIGHT / 2;
         g.setFont(Constant.APP_FONT);
         g.drawString("游戏结束，空格键以继续", x, y);
         y += TetrisUtil.getStringHeight(Constant.APP_FONT, "游戏结束，空格键以继续");
-        x = (Constant.FRAME_WIDTH - TetrisUtil.getStringWidth(
-                Constant.APP_FONT, "分数：".concat(Long.toString(score)))) >> 1;
-        g.drawString("分数：".concat(Long.toString(score)), x, y);
+        String str = "分数：".concat(Long.toString(score));
+        x = (Constant.FRAME_WIDTH - TetrisUtil.getStringWidth(Constant.APP_FONT, str)) >> 1;
+        g.drawString(str, x, y);
+        y += TetrisUtil.getStringHeight(Constant.APP_FONT, str);
+        str = "分数：".concat(Long.toString(bestScore));
+        x = (Constant.FRAME_WIDTH - TetrisUtil.getStringWidth(Constant.APP_FONT, str)) >> 1;
+        g.drawString("最高分数：".concat(Long.toString(bestScore)), x, y);
     }
 
     // 绘制实时分数
